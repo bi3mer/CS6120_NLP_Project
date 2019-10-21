@@ -39,6 +39,17 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         log.info(f'POST: {self.path}')
+
+        '''
+        There are two ways you can go about this. You can either get first receive the user name
+        and send back the tweets associated with them. The webpage can then send each tweet and
+        receive a score. The other way is to send the user name and then have the server retrieve
+        the tweets and then call the model.score method for each tweet. You then calculate the 
+        average and you're done. The potential issue with this second approach is total calculation
+        time that may result in timeouts. This is possible to avoid, you just need to get your
+        heroku and webpage settings correct. 
+        '''
+
         response = {'completed': True}
         if '/rate' in self.path:
             model = Model()
