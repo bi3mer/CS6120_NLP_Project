@@ -47,7 +47,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         the tweets and then call the model.score method for each tweet. You then calculate the 
         average and you're done. The potential issue with this second approach is total calculation
         time that may result in timeouts. This is possible to avoid, you just need to get your
-        heroku and webpage settings correct. 
+        heroku and webpage settings correct.
         '''
 
         response = {'completed': True}
@@ -62,10 +62,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         return
  
 def run():
-    print('starting server...')
+    log.info('starting server...')
     server_address = ('127.0.0.1', 8080)
     httpd = HTTPServer(server_address, HTTPServer_RequestHandler)
     httpd.serve_forever()
+    log.info(f'servering on port: 8080')
 
 if __name__ == "__main__":
     run()
