@@ -2,7 +2,7 @@ import tensorflow as tf
 import random
 import nltk
 
-from Utility import log
+from .Utility import log
 
 class Model:
     def __init__(self):

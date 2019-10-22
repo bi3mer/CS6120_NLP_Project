@@ -105,6 +105,8 @@ venv.bak/
 
 # ignore data files
 data/*
+*.pkl
+*.csv
 
 # ignore api key and secret key
 twitter_api.json

@@ -4,8 +4,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import os
 
+from Toxicity.Utility import log
 from Toxicity import Model
-from Utility import log
 
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
