@@ -10,3 +10,6 @@ COLUMNS = ['id', 'target', 'comment_text', 'severe_toxicity', 'obscene', 'identi
            'other_religion', 'other_sexual_orientation', 'physical_disability', 'psychiatric_or_mental_illness', 
            'transgender', 'white', 'created_date', 'publication_id', 'parent_id', 'article_id', 'rating', 'funny', 
            'wow', 'sad', 'likes', 'disagree', 'sexual_explicit', 'identity_annotator_count', 'toxicity_annotator_count']
+
+
+BATCH_SIZE=32
