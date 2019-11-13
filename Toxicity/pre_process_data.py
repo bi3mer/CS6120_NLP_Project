@@ -38,12 +38,16 @@ def process_data(model_type, size=None):
     data_set = []
 
     for key in tqdm(data['target'], ascii=True):
-        tokenized_text = tokenizer.tokenize(data['comment_text'][key])[:512]
+        # max input is 512 for BERT network and we have to one at the start and one at the end
+        tokenized_text = tokenizer.tokenize(f'[CLS] {data["comment_text"][key]}')[:511]
+        tokenized_text.append('[CLS]')
         tokenized_ids = tokenizer.convert_tokens_to_ids(tokenized_text)
-        
         mid_point = len(tokenized_ids) / 2
-        segment_ids = [0 if i < mid_point else 1 for i in range(len(tokenized_ids))]
 
+        while len(tokenized_ids) < 512:
+            tokenized_ids.append(0)        
+
+        segment_ids = [0 if i < mid_point else 1 for i in range(len(tokenized_ids))]
         data_set.append((tokenized_ids, segment_ids, data['target'][key]))
 
     log.info(f'Splitting data with {split_percentage * 100}% as part of the training data')
