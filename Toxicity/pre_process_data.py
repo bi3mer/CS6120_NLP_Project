@@ -39,12 +39,12 @@ def process_data(model_type, size=None):
 
     for key in tqdm(data['target'], ascii=True):
         # max input is 512 for BERT network and we have to one at the start and one at the end
-        tokenized_text = tokenizer.tokenize(f'[CLS] {data["comment_text"][key]}')[:511]
+        tokenized_text = tokenizer.tokenize(f'[CLS] {data["comment_text"][key]}')[:139]
         tokenized_text.append('[CLS]')
         tokenized_ids = tokenizer.convert_tokens_to_ids(tokenized_text)
         mid_point = len(tokenized_ids) / 2
 
-        while len(tokenized_ids) < 512:
+        while len(tokenized_ids) < 140:
             tokenized_ids.append(0)        
 
         segment_ids = [0 if i < mid_point else 1 for i in range(len(tokenized_ids))]
@@ -63,7 +63,7 @@ def process_data(model_type, size=None):
     log.info(f'Saved testing data to {testing_data_path}')
 
 if __name__ == '__main__':
-    size = 1000
+    size = 100
 
     process_data('bert-base-cased', size=size)
     process_data('bert-base-uncased', size=size)
