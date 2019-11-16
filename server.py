@@ -38,7 +38,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
-        log.info(f'POST: {self.path}')
+        #log.info(f'POST: {self.path}')
 
         '''
         There are two ways you can go about this. You can either get first receive the user name
@@ -62,11 +62,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         return
  
 def run():
-    log.info('starting server...')
+    # log.info('starting server...')
     server_address = ('127.0.0.1', 8080)
     httpd = HTTPServer(server_address, HTTPServer_RequestHandler)
     httpd.serve_forever()
-    log.info(f'servering on port: 8080')
+    # log.info(f'servering on port: 8080')
 
 if __name__ == "__main__":
     run()
