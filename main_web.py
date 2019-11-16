@@ -6,8 +6,21 @@ from Toxicity.Utility import log
 from Toxicity import Model
 
 import numpy as np
+import os, ssl
+import json
 
 app = Flask(__name__)
+
+def getTwitterKeys():
+    with open(r"./twitter_api.template.json") as keyFile:
+        keys = json.load(keyFile)
+
+    consumer_key =keys['consumer_key']
+    consumer_secret=keys['consumer_secret']
+    token=keys['token']
+    token_secret=keys['token_secret']
+
+    return consumer_key,consumer_secret,token,token_secret
 
 
 def getTweetsList(resp):
@@ -17,12 +30,9 @@ def getTweetsList(resp):
     return  tweet_text
 
 def scoreTweets(tweets):
-    scores = []
     model = Model()
-    for k,text in tweets.items():
-        scores.append(model.score(k))
+    return np.mean([model.score(k) for k, v in tweets.items()])
 
-    return np.mean(scores)
 
 @app.route('/')
 def index():
@@ -32,21 +42,15 @@ def index():
 @app.route('/usertweets', methods=['POST'])
 def usertweets():
     username = request.form.get("username")
-    b = {0: 0, 1: 1, 2: 2, 3: 3}
     print(username)
-    import os, ssl
     if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
             getattr(ssl, '_create_unverified_context', None)):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-
-    consumer_key = '0cZwgY2KG9kCJbN7vwlA1jNSF'
-    consumer_secret = 'aP8SVyw3kfiYZPGbTwOl6t5n8gjIIvFVYOzQ7IwSWU8GtPPn6T'
-    token = "3300316594-XzDEJ4Wtlv8eDgWQwDzqf9A6AaYXbfzq6m3sw43"
-    token_secret = "PVMYQmpC44NVRir8db9yHBjHxk5YkMj9YWjIizqh5GXDh"
+    consumer_key,consumer_secret,token,token_secret = getTwitterKeys()
     t = Twitter(auth=OAuth(token, token_secret, consumer_key, consumer_secret))
+
     resp = t.statuses.user_timeline(screen_name=username)
-    print(resp)
     tweet_dict = getTweetsList(resp)
     score = scoreTweets(tweet_dict)
     tweet_dict['score']=(str(score))
