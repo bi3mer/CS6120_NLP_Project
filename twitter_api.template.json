@@ -1,4 +1,6 @@
 {
-    "key": "api key here",
-    "secret": "api secret key here"
+    "consumer_key" : "0cZwgY2KG9kCJbN7vwlA1jNSF",
+    "consumer_secret" : "aP8SVyw3kfiYZPGbTwOl6t5n8gjIIvFVYOzQ7IwSWU8GtPPn6T",
+    "token" : "3300316594-XzDEJ4Wtlv8eDgWQwDzqf9A6AaYXbfzq6m3sw43",
+    "token_secret" : "PVMYQmpC44NVRir8db9yHBjHxk5YkMj9YWjIizqh5GXDh"
 }
