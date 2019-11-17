@@ -7,8 +7,8 @@ import json
 
 class TwitterDataHandler:
     def __init__(self):
-        dummy = 1
-
+        pass
+    
     def getTweetsFromUser(self,username):
         '''takes in username and returns a dictionary consisting of all tweets received from the twitter api'''
         print(username)
