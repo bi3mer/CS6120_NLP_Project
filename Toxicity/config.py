@@ -1,7 +1,8 @@
 import os
 
-TEST_PATH = os.path.join('data', 'test.csv')
-TRAIN_PATH = os.path.join('data', 'train.csv')
+BASE_DIR = 'data'
+TEST_PATH = os.path.join(BASE_DIR, 'test.csv')
+TRAIN_PATH = os.path.join(BASE_DIR, 'train.csv')
 
 COLUMNS = ['id', 'target', 'comment_text', 'severe_toxicity', 'obscene', 'identity_attack', 
            'insult', 'threat', 'asian', 'atheist', 'bisexual', 'black', 'buddhist', 'christian', 
