@@ -6,13 +6,12 @@
 # #### Model
 
 
-
-# model_type = 'bert-base-cased'
+#model_type = 'bert-base-cased'
 model_type = 'bert-base-uncased'
 # model_type = 'bert-large-cased'
 # model_type = 'bert-large-uncased'
 
-dataset_size = None # set to None for full dataset
+dataset_size = 1000 # set to None for full dataset
 min_length = 142 
 
 
@@ -20,7 +19,7 @@ min_length = 142
 
 
 
-epochs = 10
+epochs = 1
 learning_rate = 2e-5
 warmup = 0.05
 batch_size = 32
@@ -39,10 +38,7 @@ no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
 
 
 
-if dataset_size == None:
-    output_model_file = f'{model_type}.bin'
-else:
-    output_model_file = f'{dataset_size}_{model_type}.bin'
+output_model_file = f'{dataset_size}_{model_type}.bin'
 
 
 # ## Check Configuration
@@ -168,6 +164,8 @@ criterion = torch.nn.MSELoss()
 model = model.to(device)
 model = model.train()
 
+import time
+start = time.time()
 
 bar = trange(epochs, desc='epochs')
 for epoch_num in bar:
@@ -176,9 +174,8 @@ for epoch_num in bar:
 
     for step, (x, y) in enumerate(train_loader):
         bar.set_description(f'epoch {epoch_num} batch {step}')
-        predictions = model(x.to(device))
         
-        # maybe not this part to device?
+        predictions = model(x.to(device))
         loss = criterion(predictions, y.to(device))
         
         loss.backward()
@@ -188,3 +185,4 @@ for epoch_num in bar:
     bar.update(1)
 
 torch.save(model.state_dict(), model_output_path)
+print("--- %s seconds run time ---" % (time.time() - start))
