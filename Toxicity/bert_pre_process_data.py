@@ -66,7 +66,7 @@ def process_data(model_type, size=None):
     log.info(f'Saved testing data to {testing_data_path}')
 
 if __name__ == '__main__':
-    size = None
+    size = 1000
 
     process_data('bert-base-cased', size=size)
     process_data('bert-base-uncased', size=size)

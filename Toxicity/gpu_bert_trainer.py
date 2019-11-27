@@ -13,7 +13,7 @@ model_type = 'bert-base-uncased'
 # model_type = 'bert-large-uncased'
 
 dataset_size = None # set to None for full dataset
-min_length = 140
+min_length = 142 
 
 
 # #### Learning Parameters
@@ -169,11 +169,13 @@ model = model.to(device)
 model = model.train()
 
 
-for _ in trange(epochs, desc='epoch'):
+bar = trange(epochs, desc='epochs')
+for epoch_num in bar:
     train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
     optimizer.zero_grad()
 
-    for step, (x, y) in tqdm(enumerate(train_loader), desc='batch'):
+    for step, (x, y) in enumerate(train_loader):
+        bar.set_description(f'epoch {epoch_num} batch {step}')
         predictions = model(x.to(device))
         
         # maybe not this part to device?
@@ -182,5 +184,7 @@ for _ in trange(epochs, desc='epoch'):
         loss.backward()
         optimizer.step()        
         optimizer.zero_grad()
+
+    bar.update(1)
 
 torch.save(model.state_dict(), model_output_path)
