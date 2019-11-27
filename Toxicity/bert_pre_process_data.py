@@ -18,7 +18,7 @@ def tokenize_df(df, tokenizer):
     for key in tqdm(data['target'], ascii=True):
         # max input is 512 for BERT network and we have to one at the start and one at the end
         tokenized_text = tokenizer.tokenize(f'[CLS] {data["comment_text"][key]}')[:139]
-        tokenized_text.append('[CLS]')
+        tokenized_text.append('[SEP]')
         tokenized_ids = tokenizer.convert_tokens_to_ids(tokenized_text)
 
         x.append(tokenized_ids)
