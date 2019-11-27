@@ -3,41 +3,31 @@ from torch.utils.data import DataLoader, TensorDataset
 
 import pickle
 import torch
+import torch
 import os
 
 def test_model(model, test, batch_size):
+    device = torch.device('cuda')
+    model = model.to(device)
+
     with torch.no_grad():
         loader = DataLoader(test, batch_size=batch_size)
         mse = torch.nn.MSELoss()
         mses = []
         
         for _, (x, y) in enumerate(loader):
-            predictions = model.forward(x)
+            predictions = model.forward(x.to(device))
             mses.append(mse(predictions, y))
             print(f'batch MSE: {mses[-1]}')
             
         print(f'MSE: {sum(mses) / float(len(mses))}')
-
-def spread_data(dataset):
-    x = []
-    y = []
-    split = []
-    
-    for val in dataset:
-        x.append(val[0])
-        split.append(val[1])
-        y.append(val[2])
-        
-    y = torch.tensor(y, dtype=torch.float)
-    split = torch.tensor(split)
-    
-    return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.float), torch.tensor(split)
 
 # configuration variables
 model_size = 1000 # set to None for full dataset
 data_set_size = None
 batch_size = 32
 model_type = 'bert-base-cased'
+min_length = 142 
 
 # variables based on configuration
 if model_size == None:
@@ -59,8 +49,16 @@ f = open(os.path.join('data', test_pickle_file_name), 'rb')
 test = pickle.load(f)
 f.close()
 
-test_x, test_y, split_indexes_test = spread_data(test)
-test = TensorDataset(test_x, test_y)
+y = torch.tensor([torch.tensor(_y, dtype=torch.float) for _y in y])
+
+new_x = []
+for row in x:
+    while len(row) < min_length:
+        row.append(0)
+        
+    new_x.append(x)
+
+dataset = TensorDataset(torch.tensor(x, dtype=torch.long), y)
 
 # run test
 test_model(model, test, batch_size)
