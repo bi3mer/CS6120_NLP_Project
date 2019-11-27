@@ -165,6 +165,7 @@ optimizer = BertAdam(
 
 
 criterion = torch.nn.MSELoss()  
+model = model.to(device)
 model = model.train()
 
 
@@ -173,9 +174,10 @@ for _ in trange(epochs, desc='epoch'):
     optimizer.zero_grad()
 
     for step, (x, y) in tqdm(enumerate(train_loader), desc='batch'):
-        predictions = model(x)
+        predictions = model(x.to(device))
         
-        loss = criterion(predictions, y)
+        # maybe not this part to device?
+        loss = criterion(predictions, y.to(device))
         
         loss.backward()
         optimizer.step()        
