@@ -6,12 +6,12 @@
 # #### Model
 
 
-#model_type = 'bert-base-cased'
-model_type = 'bert-base-uncased'
+model_type = 'bert-base-cased'
+#model_type = 'bert-base-uncased'
 # model_type = 'bert-large-cased'
 # model_type = 'bert-large-uncased'
 
-dataset_size = 1000 # set to None for full dataset
+dataset_size = None # set to None for full dataset
 min_length = 142 
 
 
