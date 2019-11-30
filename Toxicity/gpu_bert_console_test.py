@@ -23,7 +23,7 @@ def test_model(model, test, batch_size):
         print(f'MSE: {sum(mses) / float(len(mses))}')
 
 # configuration variables
-data_set_size = 1000
+data_set_size = None
 batch_size = 32
 model_type = 'bert-base-cased'
 min_length = 142 
