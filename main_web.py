@@ -22,11 +22,10 @@ def usertweets():
 
 @app.route('/texteval', methods=['POST'])
 def texteval():
-    model = Model()
     text = request.form.get("text_content")
     score = model.score(text)
     return render_template("index.html", score_value=score, text_content=text)
 
-
+model = Model()
 if __name__ == "__main__":
     app.run(debug=True)
