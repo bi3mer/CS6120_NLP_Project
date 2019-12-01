@@ -8,6 +8,7 @@ sentences = []
 sentences.append('Hello, world!')
 sentences.append('I hate this world! And I am so toxic and angry!')
 sentences.append("Ahhhhhhhhh")
+sentences.append('You make me so happy.')
 
 predictions = model.score_multiple(sentences)
 

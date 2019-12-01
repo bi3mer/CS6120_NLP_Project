@@ -18,5 +18,5 @@ y_true = []
 for line in df.iterrows():
     y_true.append(line[1][0])
 
-y_guess = np.zeros(len(y_true))
+y_guess = np.full(len(y_true), 1)
 print(f'MSE: {mean_squared_error(np.array(y_true), y_guess)}')

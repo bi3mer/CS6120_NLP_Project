@@ -2,6 +2,7 @@ from pytorch_pretrained_bert import BertForSequenceClassification
 from pytorch_pretrained_bert import BertTokenizer
 
 import torch
+import os
 
 from .Utility import log
 
@@ -10,6 +11,12 @@ class Model:
         log.info('Instantiating model')
         model_type = 'bert-base-cased'
         self.model = BertForSequenceClassification.from_pretrained(model_type, cache_dir=None,num_labels=1)
+
+        log.info('Loading model to CPU')
+        device = torch.device('cpu')
+        path = os.path.join('Toxicity', 'model', f'None_{model_type}.bin')
+        state_dict = torch.load(path, map_location=device)
+        self.model.load_state_dict(state_dict)
         
         log.info('Instantiating tokenizer')
         self.tokenizer = BertTokenizer.from_pretrained(model_type)
