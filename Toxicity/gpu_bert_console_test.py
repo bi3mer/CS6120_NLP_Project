@@ -23,7 +23,7 @@ def test_model(model, test, batch_size):
         print(f'MSE: {sum(mses) / float(len(mses))}')
 
 # configuration variables
-data_set_size = 1000
+data_set_size = None
 batch_size = 32
 model_type = 'bert-base-cased'
 min_length = 142 
@@ -34,7 +34,7 @@ model_file_name = f'{data_set_size}_{model_type}.bin'
 test_pickle_file_name = f'{model_type}_{data_set_size}_testing_data.pkl'
 
 # load BERT
-model = BertForSequenceClassification.from_pretrained(model_type, cache_dir=None,num_labels=1)
+model = BertForSequenceClassification.from_pretrained(model_type,cache_dir=None,num_labels=1)
 model.load_state_dict(torch.load(os.path.join('model', model_file_name)))
 
 # load in test data set
