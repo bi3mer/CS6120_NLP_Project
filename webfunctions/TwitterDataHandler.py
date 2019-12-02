@@ -20,9 +20,11 @@ class TwitterDataHandler:
         t = Twitter(auth=OAuth(token, token_secret, consumer_key, consumer_secret))
 
         resp = t.statuses.user_timeline(screen_name=username)
+        print(resp)
         tweet_dict = self.getTweetsList(resp)
         score = self.scoreTweets(tweet_dict)
         tweet_dict['score'] = (str(score))
+        tweet_dict['username'] = username
         return  tweet_dict
 
     def getTwitterKeys(self):
@@ -39,7 +41,16 @@ class TwitterDataHandler:
     def getTweetsList(self,resp):
         tweet_text = dict()
         for i, t in enumerate(resp):
+            tweet = t.get('text', '')
+            strs = tweet.split(' ',1)
+            if strs[0] == 'RT':
+            #     retweets ignore
+                continue
+            elif strs[0][0]=='@':
+                continue
             tweet_text[i] = t.get('text', '')
+            if len(tweet_text) == 10:
+                break
         return tweet_text
 
     def scoreTweets(self,tweets):
