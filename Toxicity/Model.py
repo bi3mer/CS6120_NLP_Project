@@ -1,53 +1,28 @@
-from pytorch_pretrained_bert import BertForSequenceClassification
-from pytorch_pretrained_bert import BertTokenizer
-
-import torch
-
 from .Utility import log
+
+import pickle
+import os
 
 class Model:
     def __init__(self):
         log.info('Instantiating model')
-        model_type = 'bert-base-cased'
-        self.model = BertForSequenceClassification.from_pretrained(model_type, cache_dir=None,num_labels=1)
+        model_path = os.path.join('models', 'Ridge_Regression_tfidf_sampled.model')
+        f = open(model_path, 'rb')
+        self.model = pickle.load(f)
+        f.close()
+
+        log.info('instantiating data transformer')
+        transformer_path = os.path.join('models', 'TF_IDF_Transformer_Sampled')
+        f = open(transformer_path, 'rb')
+        self.transformer = pickle.load(f)
+        f.close()
         
-        log.info('Instantiating tokenizer')
-        self.tokenizer = BertTokenizer.from_pretrained(model_type)
+    def score(self, sequences):
+        if type(sequences) == str:
+            sequences = [sequences]
 
-    def score(self, sequence):
         log.info('Tokenizing input')
-        tokenized_input = self.tokenizer.tokenize(f'[CLS] {sequence}')[:139]
-        tokenized_input.append('[SEP]')
-
-        tokenized_ids = self.tokenizer.convert_tokens_to_ids(tokenized_input)
-
-        while len(tokenized_ids) < 140:
-            tokenized_ids.append(0)
+        transforms = self.transformer.transform(sequences)
 
         log.info('Scoring toxicity of input')
-        with torch.no_grad():
-            prediction = self.model.forward(torch.tensor([tokenized_ids], dtype=torch.long))
-            return prediction[0]
-
-        log.error("There was an error calculating the toxicity with the model.")
-        return 0
-
-    def score_multiple(self, sequences):
-        log.info('Tokenizing input')
-        tokenized_ids = []
-        for sequence in sequences:
-            tokenized_input = self.tokenizer.tokenize(f'[CLS] {sequence}')[:139]
-            tokenized_input.append('[SEP]')
-
-            ids = self.tokenizer.convert_tokens_to_ids(tokenized_input)
-
-            while len(ids) < 140:
-                ids.append(0)
-            tokenized_ids.append(ids)
-
-        log.info('scoring toxicity')
-        with torch.no_grad():
-            return self.model.forward(torch.tensor(tokenized_ids, dtype=torch.long))
-
-        log.error('Encountered error calculating toxicity with the model')
-        return [0 for _ in range(len(sequences))]
+        return self.model.predict(transforms)
